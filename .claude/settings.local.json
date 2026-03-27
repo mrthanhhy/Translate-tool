@@ -29,7 +29,17 @@
       "Bash(powershell -Command \"Invoke-WebRequest -Uri 'https://gluonhq.com/client/sdk/javafx/81c590c0e43817c68e1a64970678b39a6d3c876c/RELEASE/javafx-sdk-23.0.1.zip' -OutFile 'C:/Users/htngu/Downloads/javafx-sdk-23.0.1.zip'\" 2>&1)",
       "Bash(Select-String \"Installing\" -Context 0,5)",
       "Bash(ls:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(del:*)",
+      "Bash(kill %1)",
+      "Bash(pkill -f \"TranslateToolApplication\")",
+      "Bash(taskkill /F /FI \"WINDOWTITLE eq TranslateToolApplication\")",
+      "Bash(taskkill /F /IM java.exe)",
+      "Bash(tasklist /FI \"IMAGENAME eq java.exe\")",
+      "Bash(taskkill /F /FI \"WINDOWTITLE eq Maven*\")",
+      "Bash(move \"translate-tool-1.0.0-SNAPSHOT.jar\" \"translate-tool-1.0.0-SNAPSHOT.jar.locked\")",
+      "Read(//dev/**)",
+      "Bash(rm -rf \"D:/projects/projects/Translate-tool/target\")"
     ]
   }
 }
