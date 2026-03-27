@@ -61,22 +61,21 @@ public class OllamaApiClient {
                 if (!response.isSuccessful()) {
                     String errorBody = response.body() != null ? response.body().string() : "";
                     logger.error("Ollama API error: {} - {}", response.code(), errorBody);
-                    return new OllamaResponse(false, "Translation failed: " + response.code() + " - " + errorBody, errorBody);
+                    return new OllamaResponse(false, "Translation failed: " + response.code());
                 }
 
                 String responseBody = response.body().string();
-                logger.info("Ollama response received");
+                logger.info("Ollama response received: {}", responseBody);
 
                 // Parse response (Ollama trả về JSON stream)
                 OllamaResponse result = new OllamaResponse(true, responseBody, responseBody);
-
                 logger.info("Translation result: {}", result.getMessage());
                 return result;
             }
 
         } catch (IOException e) {
             logger.error("Error calling Ollama API: {}", e.getMessage());
-            return new OllamaResponse(false, "Connection error: " + e.getMessage(), e.getMessage());
+            return new OllamaResponse(false, "Connection error");
         }
     }
 

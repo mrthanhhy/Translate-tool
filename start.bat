@@ -1,4 +1,6 @@
 @echo off
+setlocal EnableDelayedExpansion
+
 echo ========================================
 echo   Translate Tool - Start Script
 echo ========================================
@@ -7,8 +9,7 @@ echo.
 REM Kiểm tra Java
 java -version >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Java không được cài đặt!
-    echo Vui lòng cài đặt JDK 17+ từ https://adoptium.net/
+    echo Java chưa được cài đặt hoặc chưa trong PATH!
     pause
     exit /b 1
 )
@@ -16,17 +17,27 @@ if errorlevel 1 (
 REM Kiểm tra Maven
 mvn -version >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Maven không được cài đặt!
-    echo Vui lòng cài đặt Maven từ https://maven.apache.org/download.cgi
+    echo Maven chưa được cài đặt hoặc chưa trong PATH!
     pause
     exit /b 1
 )
 
-REM Kiểm tra Ollama
-ollama list >nul 2>&1
-if errorlevel 1 (
-    echo ERROR: Ollama không được cài đặt!
-    echo Vui lòng cài đặt Ollama từ https://ollama.ai/download
+REM Kiểm tra JavaFX
+set JAVAFX_PATH=C:\Program Files\JavaFX\bin
+if not exist "%JAVAFX_PATH%" (
+    echo JavaFX chưa được cài đặt!
+    echo Đang tải JavaFX SDK...
+
+    rem Tạo thư mục Downloads nếu chưa có
+    if not exist "C:\Users\htngu\Downloads" mkdir "C:\Users\htngu\Downloads"
+
+    rem Download JavaFX SDK
+    curl -L "https://download.java.net/java/GA/javadoc/api/17/docs/" -o "C:/Users/htngu/Downloads/temp.html" 2>nul
+
+    echo Xin vui lòng cài đặt JavaFX thủ công:
+    echo 1. Truy cập https://gluonhq.com/products/javafx/
+    echo 2. Download và chạy installer
+    echo 3. Đặt vào: C:\Program Files\JavaFX
     pause
     exit /b 1
 )
@@ -62,6 +73,17 @@ REM Khởi động Ollama server (nếu chưa chạy)
 echo Starting Ollama server...
 ollama serve > ollama-server.log 2>&1 &
 timeout /t 5 /nobreak >nul
+
+REM Build ứng dụng nếu chưa có JAR
+if not exist "target\translate-tool-1.0.0-SNAPSHOT.jar" (
+    echo Building application...
+    mvn clean package -DskipTests
+    if errorlevel 1 (
+        echo Build failed!
+        pause
+        exit /b 1
+    )
+)
 
 echo Starting Translate Tool...
 echo.

@@ -139,6 +139,7 @@
                 <version>3.2.0</version>
                 <configuration>
                     <mainClass>com.translate.TranslateToolApplication</mainClass>
+                    <context-path>/</context-path>
                 </configuration>
                 <executions>
                     <execution>

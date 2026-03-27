@@ -2,6 +2,7 @@ package com.translate.service;
 
 import com.translate.configuration.OllamaApiClient;
 import com.translate.dto.OllamaResponse;
+import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,19 +48,24 @@ public class TranslateController {
     }
 
     /**
-     * Show popup dịch thuật
+     * Show popup dịch thuật (console-based, không cần JavaFX)
      */
     public void showPopup() {
-        try {
-            // Khởi tạo và chạy popup JavaFX
-            TranslatePopupService popupService = new TranslatePopupService();
-            popupService.setOllamaClient(ollamaClient);
-            popupService.setHotkeyConfig(hotkeyConfig);
-            popupService.launch(null, new String[]{});
-            logger.info("Popup service started");
-        } catch (Exception e) {
-            logger.error("Failed to show popup: {}", e.getMessage(), e);
-        }
+        TranslatePopupService popupService = new TranslatePopupService();
+        popupService.setOllamaClient(ollamaClient);
+        popupService.setHotkeyConfig(hotkeyConfig);
+
+        // Nhập văn bản và dịch
+        System.out.println("\n=== Translation Popup ===");
+        System.out.println("Nhập văn bản cần dịch:");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("> ");
+
+        // Đọc văn bản từ console (dễ bị cut text nếu dài)
+        popupService.setSourceLanguage("Vietnamese");
+        popupService.setTargetLanguage("English");
+
+        logger.info("Popup service started (console mode)");
     }
 
     /**

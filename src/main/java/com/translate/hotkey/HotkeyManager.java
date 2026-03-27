@@ -7,6 +7,10 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.translate.service.TranslateController;
+
+import java.util.function.Supplier;
+
 /**
  * Quản lý hotkey để kích hoạt dịch thuật
  */
@@ -17,11 +21,14 @@ public class HotkeyManager {
     private static NativeKeyListener listener;
     private final String hotkeyConfig;
     private final String hotkeyDescription;
+    private final TranslateController controller;
     private boolean enabled = true;
 
-    public HotkeyManager(String hotkeyConfig, String hotkeyDescription) {
+    public HotkeyManager(String hotkeyConfig, String hotkeyDescription,
+            Supplier<TranslateController> controllerSupplier) {
         this.hotkeyConfig = hotkeyConfig;
         this.hotkeyDescription = hotkeyDescription;
+        this.controller = controllerSupplier.get();
 
         listener = new NativeKeyListener() {
             @Override
@@ -41,17 +48,8 @@ public class HotkeyManager {
             }
 
             private void onHotkeyPressed(NativeKeyEvent event) {
-                // Kiểm tra hotkey đã cấu hình
-                if (!isHotkeyMatch(event)) {
-                    return;
-                }
-
-                // Kích hoạt popup dịch thuật
-                try {
-                    logger.info("Hotkey triggered - showing popup");
-                } catch (Exception ex) {
-                    logger.error("Error handling hotkey: {}", ex.getMessage());
-                }
+                logger.info("Hotkey triggered - showing popup");
+                controller.showPopup();
             }
 
             private boolean isHotkeyMatch(NativeKeyEvent event) {

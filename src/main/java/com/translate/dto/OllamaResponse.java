@@ -11,12 +11,31 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class OllamaResponse {
 
     private boolean success;
     private String message;
     private String response;
+
+    public OllamaResponse(boolean success, String message, String response) {
+        this.success = success;
+        this.message = message;
+        this.response = response;
+    }
+
+    public OllamaResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+        this.response = null;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
 
     @Override
     public String toString() {

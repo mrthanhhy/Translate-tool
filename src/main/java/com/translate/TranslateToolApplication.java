@@ -2,6 +2,8 @@ package com.translate;
 
 import com.translate.configuration.OllamaApiClient;
 import com.translate.hotkey.HotkeyManager;
+import com.translate.service.TranslateController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.lang.reflect.Array;
 import java.util.concurrent.TimeUnit;
 import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class TranslateToolApplication implements CommandLineRunner {
@@ -31,6 +32,8 @@ public class TranslateToolApplication implements CommandLineRunner {
     private String hotkeyDescription;
 
     private HotkeyManager hotkeyManager;
+    @Autowired
+    private TranslateController translateController;
 
     public static void main(String[] args) {
         SpringApplication.run(TranslateToolApplication.class, args);
@@ -38,13 +41,14 @@ public class TranslateToolApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Khởi tạo Ollama client
-        OllamaApiClient ollamaClient = new OllamaApiClient(ollamaHost, ollamaModel, 120);
+        this.ollamaHost = ollamaHost;
+        this.ollamaModel = ollamaModel;
 
         // Kích hoạt hotkey nếu enabled
         if (hotkeyEnabled) {
             try {
-                hotkeyManager = new HotkeyManager(hotkeyConfig, hotkeyDescription);
+                hotkeyManager = new HotkeyManager(hotkeyConfig, hotkeyDescription,
+                        () -> translateController);
                 hotkeyManager.activate();
                 System.out.println("=== Translate Tool Started ===");
                 System.out.println("Hotkey: " + hotkeyConfig.replace("256+", "Ctrl+").replace("+160", "+Alt+T"));
@@ -58,6 +62,7 @@ public class TranslateToolApplication implements CommandLineRunner {
         }
 
         // Kiểm tra Ollama
+        OllamaApiClient ollamaClient = new OllamaApiClient(ollamaHost, ollamaModel, 120);
         if (ollamaClient.isOllamaAvailable()) {
             System.out.println("Ollama is available and ready to translate!");
         } else {
