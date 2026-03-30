@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="anh-viet-translator" />
+        <module name="translate-tool" />
       </profile>
     </annotationProcessing>
   </component>

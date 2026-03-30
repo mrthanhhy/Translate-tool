@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
  * Service gọi API Ollama để dịch thuật
  */
 public class OllamaService {
-    private static final String OLLAMA_BASE_URL = "http://localhost:11434";
+    private static final String OLLAMA_BASE_URL = "https://chery-unnatural-collinearly.ngrok-free.dev";
     private static final String MODEL_NAME = "spTranl";
 
     /**
