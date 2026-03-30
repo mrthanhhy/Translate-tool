@@ -1,0 +1,5 @@
+com\translate\Main.class
+com\translate\TextCleaner.class
+com\translate\TranslationPopup.class
+com\translate\HotkeyListener.class
+com\translate\OllamaService.class
